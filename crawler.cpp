@@ -1,15 +1,16 @@
 #include <iostream>
 #include <string>
 
-class Crawler {
-public:
-    void fetch(const std::string& url) {
-        std::cout << "Fetching: " << url << std::endl;
-        doNetworkCall(url); // ❌ Undefined function
-    }
-};
+void parseResponse(const std::string& html) {
+    std::string marker = "<!--SpecialMarker-->";
+    size_t pos = html.find(marker);
+
+    std::string extracted = html.substr(pos); // ❌ CRITICAL: no check for std::string::npos
+
+    std::cout << "Extracted: " << extracted << std::endl;
+}
 
 int main() {
-    Crawler crawler;
-    crawler.fetch(""); // Empty URL — should be checked
+    std::string html = "<html><body>No marker here</body></html>";
+    parseResponse(html); // Will call substr(pos) where pos == npos!
 }
